@@ -1,5 +1,6 @@
 package com.igladkikh.warehouse.dto;
 
+import com.igladkikh.warehouse.annotation.PercentValue;
 import com.igladkikh.warehouse.model.SockColor;
 
 import javax.validation.constraints.Max;
@@ -13,6 +14,7 @@ public record SockDto(
         SockColor color,
         @Min(0)
         @Max(100)
+        @PercentValue
         int cotton,
         @PositiveOrZero
         int quantity) {

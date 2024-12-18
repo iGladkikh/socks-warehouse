@@ -12,7 +12,9 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 @Constraint(validatedBy = PercentValueValidator.class)
 public @interface PercentValue {
-    String message() default "Value must be between 0 and 100";
+    String message() default "Value must be between {min} and {max}";
     Class<?>[] groups() default {};
     Class<?>[] payload() default {};
+    int min() default 0;
+    int max() default 100;
 }
