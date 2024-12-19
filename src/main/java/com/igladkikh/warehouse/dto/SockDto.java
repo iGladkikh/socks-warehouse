@@ -2,20 +2,18 @@ package com.igladkikh.warehouse.dto;
 
 import com.igladkikh.warehouse.annotation.PercentValue;
 import com.igladkikh.warehouse.model.SockColor;
+import lombok.Data;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 
-public record SockDto(
-        long id,
-        @NotNull
-        SockColor color,
-        @Min(0)
-        @Max(100)
-        @PercentValue
-        int cotton,
-        @PositiveOrZero
-        int quantity) {
+@Data
+public class SockDto {
+    private long id;
+    @NotNull
+    private SockColor color;
+    @PercentValue
+    private int cotton;
+    @PositiveOrZero
+    private int quantity;
 }

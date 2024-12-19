@@ -11,17 +11,18 @@ public class SockMapper {
 
     public static Sock toEntity(SockDto dto) {
         Sock sock = new Sock();
-        sock.setColor(dto.color());
-        sock.setCottonPercentPart(dto.cotton());
-        sock.setQuantity(dto.quantity());
+        sock.setColor(dto.getColor());
+        sock.setCottonPercentPart(dto.getCotton());
+        sock.setQuantity(dto.getQuantity());
         return sock;
     }
 
     public static SockDto toDto(Sock sock) {
-        return new SockDto(sock.getId(),
-                sock.getColor(),
-                sock.getCottonPercentPart(),
-                sock.getQuantity());
+        SockDto dto = new SockDto();
+        dto.setColor(sock.getColor());
+        dto.setCotton(dto.getCotton());
+        dto.setQuantity(sock.getQuantity());
+        return dto;
     }
 
     public static List<SockDto> toDto(Iterable<Sock> socks) {
