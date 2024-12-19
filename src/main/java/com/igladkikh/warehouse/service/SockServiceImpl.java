@@ -15,9 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-import java.util.Scanner;
+import java.util.*;
 
 @Service
 @Transactional(readOnly = true)
@@ -26,8 +24,8 @@ public class SockServiceImpl implements SockService {
     private final SockRepository repository;
 
     @Override
-    public int getCount(SockFilter filter) {
-        return 0;
+    public List<SockDto> findMany(SockFilter filter) {
+        return Collections.emptyList();
     }
 
     @Override

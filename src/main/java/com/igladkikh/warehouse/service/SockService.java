@@ -4,9 +4,11 @@ import com.igladkikh.warehouse.dto.SockDto;
 import com.igladkikh.warehouse.dto.SockFilter;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 public interface SockService {
 
-    int getCount(SockFilter filter);
+    List<SockDto> findMany(SockFilter filter);
 
     SockDto plus(SockDto dto);
 

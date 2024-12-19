@@ -4,8 +4,8 @@ import com.igladkikh.warehouse.annotation.PercentValue;
 import com.igladkikh.warehouse.model.SockColor;
 import lombok.Data;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PositiveOrZero;
 
 @Data
 public class SockDto {
@@ -14,6 +14,6 @@ public class SockDto {
     private SockColor color;
     @PercentValue
     private int cotton;
-    @PositiveOrZero
+    @Min(0)
     private int quantity;
 }
