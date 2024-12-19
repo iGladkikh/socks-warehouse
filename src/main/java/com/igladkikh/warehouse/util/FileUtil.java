@@ -11,7 +11,7 @@ import static java.lang.System.getProperty;
 
 public class FileUtil {
     private static final String MIME_TYPE = "text/csv";
-    private static final Path TMP_DIRECTORY = Paths.get(getProperty("user.dir"), "tmp");;
+    private static final Path TMP_DIRECTORY = Paths.get(getProperty("user.dir"), "tmp");
 
     public static void validate(MultipartFile file) {
         if (file.isEmpty()) {
