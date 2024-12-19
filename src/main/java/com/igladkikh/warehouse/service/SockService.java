@@ -2,6 +2,7 @@ package com.igladkikh.warehouse.service;
 
 import com.igladkikh.warehouse.dto.SockDto;
 import com.igladkikh.warehouse.dto.SockFilter;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface SockService {
 
@@ -11,7 +12,7 @@ public interface SockService {
 
     SockDto minus(SockDto dto);
 
-    SockDto update(long id);
+    SockDto update(long id, SockDto dto);
 
-    void uploadFromFile();
+    void uploadFromFile(MultipartFile file);
 }
