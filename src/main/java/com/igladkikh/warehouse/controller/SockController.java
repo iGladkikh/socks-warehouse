@@ -1,10 +1,12 @@
 package com.igladkikh.warehouse.controller;
 
 import com.igladkikh.warehouse.dto.SockDto;
-import com.igladkikh.warehouse.dto.SockFilter;
+import com.igladkikh.warehouse.dto.SockQueryFilter;
 import com.igladkikh.warehouse.model.SockColor;
 import com.igladkikh.warehouse.service.SockService;
+import com.igladkikh.warehouse.util.FileUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,20 +23,22 @@ public class SockController {
     private final SockService service;
 
     @GetMapping
-    public List<SockDto> findMany(@RequestParam SockColor[] colors,
-                                  @RequestParam(defaultValue = "0") int cottonMin,
-                                  @RequestParam(defaultValue = "100") int cottonMax,
-                                  @RequestParam(defaultValue = SockFilter.DEFAULT_ORDER_FIELD) SockFilter.OrderField orderField,
-                                  @RequestParam(defaultValue = SockFilter.DEFAULT_ORDER_DIRECTION) SockFilter.OrderDirection orderDirection) {
+    public List<SockDto> findMany(@RequestParam(required = false, name = "color") List<SockColor> colors,
+                                  @RequestParam(required = false) Integer cotton,
+                                  @RequestParam(required = false) Integer cottonMin,
+                                  @RequestParam(required = false) Integer cottonMax,
+                                  @RequestParam(defaultValue = SockQueryFilter.DEFAULT_ORDER_FIELD) SockQueryFilter.SortField sortField,
+                                  @RequestParam(defaultValue = SockQueryFilter.DEFAULT_ORDER_DIRECTION) Sort.Direction sortDirection) {
 
-        SockFilter filter = SockFilter.builder()
-                .color(colors)
+        SockQueryFilter filter = SockQueryFilter.builder()
+                .colors(colors)
+                .cotton(cotton)
                 .cottonMax(cottonMax)
                 .cottonMin(cottonMin)
-                .orderField(orderField)
-                .orderDirection(orderDirection)
+                .sortField(sortField)
+                .sortDirection(sortDirection)
                 .build();
-        return service.findMany(filter);
+        return service.findWithFilter(filter);
     }
 
     @PostMapping("/income")
@@ -55,6 +59,7 @@ public class SockController {
 
     @PostMapping("/batch")
     public void uploadFromFile(@RequestParam("file") MultipartFile file) {
+        FileUtil.validate(file);
         service.uploadFromFile(file);
     }
 }
