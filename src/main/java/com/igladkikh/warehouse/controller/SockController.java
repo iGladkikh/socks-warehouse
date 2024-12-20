@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
@@ -32,6 +33,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import java.util.List;
 
+@Slf4j
 @Tag(name = "Sock-controller")
 @Validated
 @RestController
@@ -66,7 +68,6 @@ public class SockController {
                                   @RequestParam(defaultValue = SockQueryFilter.DEFAULT_ORDER_FIELD) SockQueryFilter.SortField sortField,
                                   @Parameter(description = "Направление сортировки")
                                   @RequestParam(defaultValue = SockQueryFilter.DEFAULT_ORDER_DIRECTION) Sort.Direction sortDirection) {
-
         SockQueryFilter filter = SockQueryFilter.builder()
                 .colors(colors)
                 .cotton(cotton)
@@ -75,6 +76,7 @@ public class SockController {
                 .sortField(sortField)
                 .sortDirection(sortDirection)
                 .build();
+        log.info("Find socks with filter {}", filter);
         return service.findWithFilter(filter);
     }
 
@@ -91,6 +93,7 @@ public class SockController {
     })
     @PostMapping(value = "/income")
     public SockDto plus(@RequestBody @Valid SockDto dto) {
+        log.info("Register income socks with dto {}", dto);
         return service.plus(dto);
     }
 
@@ -107,6 +110,7 @@ public class SockController {
     })
     @PostMapping("/outcome")
     public SockDto minus(@RequestBody @Valid SockDto dto) {
+        log.info("Register outcome socks with dto {}", dto);
         return service.minus(dto);
     }
 
@@ -124,6 +128,7 @@ public class SockController {
     @PutMapping("/{id}")
     public SockDto update(@PathVariable @Min(1) long id,
                           @RequestBody @Valid SockDto dto) {
+        log.info("Update socks with dto {}", dto);
         return service.update(id, dto);
     }
 
@@ -140,6 +145,7 @@ public class SockController {
     })
     @PostMapping(value = "/batch", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public List<SockDto> uploadFromFile(@RequestPart("file") MultipartFile file) {
+        log.info("Update socks from file {}", file.getOriginalFilename());
         FileUtil.validate(file);
         return service.uploadFromFile(file);
     }

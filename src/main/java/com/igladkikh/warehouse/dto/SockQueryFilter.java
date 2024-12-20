@@ -3,12 +3,14 @@ package com.igladkikh.warehouse.dto;
 import com.igladkikh.warehouse.model.SockColor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 import org.springframework.data.domain.Sort;
 
 import java.util.List;
 
 @Builder
 @Getter
+@ToString
 public class SockQueryFilter {
     public static final String DEFAULT_ORDER_FIELD = "ID";
     public static final String DEFAULT_ORDER_DIRECTION = "ASC";
