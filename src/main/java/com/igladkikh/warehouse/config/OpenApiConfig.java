@@ -6,8 +6,7 @@ import io.swagger.v3.oas.annotations.info.Info;
 
 @OpenAPIDefinition(
         info = @Info(
-                title = "Sock warehouse Api",
-                description = "API склада носков",
+                title = "REST API для учета носков на складе магазина",
                 version = "1.0.0",
                 contact = @Contact(
                         name = "Igor Gladkikh",
