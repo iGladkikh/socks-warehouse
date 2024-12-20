@@ -2,6 +2,9 @@ package com.igladkikh.warehouse.service;
 
 import com.igladkikh.warehouse.dto.SockDto;
 import com.igladkikh.warehouse.dto.SockQueryFilter;
+import com.igladkikh.warehouse.exception.BadRequestException;
+import com.igladkikh.warehouse.exception.DataConflictException;
+import com.igladkikh.warehouse.exception.DataNotFoundException;
 import com.igladkikh.warehouse.mapper.SockMapper;
 import com.igladkikh.warehouse.model.Sock;
 import com.igladkikh.warehouse.model.SockColor;
@@ -17,7 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Scanner;
 
@@ -64,7 +66,7 @@ public class SockServiceImpl implements SockService {
                     : sock.getQuantity() + dto.getQuantity();
 
             if (resultQuantity < 0) {
-                throw new RuntimeException("Недостаточное количество товара для отгрузки");
+                throw new BadRequestException("Недостаточное количество товара для отгрузки");
             }
 
             sock.setQuantity(resultQuantity);
@@ -79,12 +81,12 @@ public class SockServiceImpl implements SockService {
     public SockDto update(long id, SockDto dto) {
         Optional<Sock> optionalSock = repository.findById(id);
         if (optionalSock.isEmpty()) {
-            throw new NoSuchElementException("Товар с id=" + id + " не найден");
+            throw new DataNotFoundException("Товар с id=" + id + " не найден");
         }
 
         Sock oldSock = optionalSock.get();
         if (oldSock.getId() != id) {
-            throw new IllegalArgumentException("Товар с цветом=" + dto.getColor() +
+            throw new DataConflictException("Товар с цветом=" + dto.getColor() +
                     " с содержанием хлопка " + dto.getCotton() + " имеет другой id");
         }
         Sock newSock = SockMapper.toEntity(dto);
