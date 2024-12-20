@@ -1,31 +1,45 @@
 package com.igladkikh.warehouse.service;
 
 import com.igladkikh.warehouse.dto.SockDto;
-import com.igladkikh.warehouse.dto.SockFilter;
+import com.igladkikh.warehouse.dto.SockQueryFilter;
 import com.igladkikh.warehouse.mapper.SockMapper;
 import com.igladkikh.warehouse.model.Sock;
 import com.igladkikh.warehouse.model.SockColor;
 import com.igladkikh.warehouse.repository.SockRepository;
 import com.igladkikh.warehouse.util.FileUtil;
+import com.igladkikh.warehouse.util.SockDtoUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.Valid;
 import java.io.IOException;
-import java.util.*;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
+import java.util.Scanner;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class SockServiceImpl implements SockService {
     private final SockRepository repository;
+    private final SockDtoUtil dtoValidator;
 
-    @Override
-    public List<SockDto> findMany(SockFilter filter) {
-        return Collections.emptyList();
+    public List<SockDto> findWithFilter(SockQueryFilter filter) {
+
+        Specification<Sock> spec = Specification
+                .where(repository.hasColor(filter.getColors()))
+                .and(repository.cottonEquals(filter.getCotton()))
+                .and(repository.cottonLessThan(filter.getCottonMax()))
+                .and(repository.cottonGreaterThan(filter.getCottonMin()));
+
+        Sort sort = Sort.by(filter.getSortField().toString().toLowerCase());
+        sort = filter.getSortDirection() == Sort.Direction.ASC ? sort.ascending() : sort.descending();
+
+        return SockMapper.toDto(repository.findAll(spec, sort));
     }
 
     @Override
@@ -65,20 +79,22 @@ public class SockServiceImpl implements SockService {
     public SockDto update(long id, SockDto dto) {
         Optional<Sock> optionalSock = repository.findById(id);
         if (optionalSock.isEmpty()) {
-            throw new NoSuchElementException("Товар с id=" + id + "не найден");
+            throw new NoSuchElementException("Товар с id=" + id + " не найден");
         }
 
         Sock oldSock = optionalSock.get();
+        if (oldSock.getId() != id) {
+            throw new IllegalArgumentException("Товар с цветом=" + dto.getColor() +
+                    " с содержанием хлопка " + dto.getCotton() + " имеет другой id");
+        }
         Sock newSock = SockMapper.toEntity(dto);
         newSock.setId(oldSock.getId());
         return SockMapper.toDto(repository.save(newSock));
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {Throwable.class})
     public void uploadFromFile(MultipartFile file) {
-        FileUtil.validate(file);
-
         try (Scanner scanner = new Scanner(file.getInputStream())) {
             // Сохранение копии файла
             FileUtil.createTempFile(file);
@@ -100,8 +116,10 @@ public class SockServiceImpl implements SockService {
         }
     }
 
-    @Validated
-    private void update(@Valid SockDto dto) {
+    private void update(SockDto dto) {
+        // Валидация
+        dtoValidator.validate(dto);
+
         Optional<Sock> optionalSock = repository.findByColorAndCottonPercentPart(dto.getColor(), dto.getCotton());
         if (optionalSock.isEmpty()) {
             repository.save(SockMapper.toEntity(dto));

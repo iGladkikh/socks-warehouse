@@ -1,14 +1,14 @@
 package com.igladkikh.warehouse.service;
 
 import com.igladkikh.warehouse.dto.SockDto;
-import com.igladkikh.warehouse.dto.SockFilter;
+import com.igladkikh.warehouse.dto.SockQueryFilter;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 public interface SockService {
 
-    List<SockDto> findMany(SockFilter filter);
+    List<SockDto> findWithFilter(SockQueryFilter filter);
 
     SockDto plus(SockDto dto);
 
