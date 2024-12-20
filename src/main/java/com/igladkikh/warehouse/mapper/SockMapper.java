@@ -19,8 +19,9 @@ public class SockMapper {
 
     public static SockDto toDto(Sock sock) {
         SockDto dto = new SockDto();
+        dto.setId(sock.getId());
         dto.setColor(sock.getColor());
-        dto.setCotton(dto.getCotton());
+        dto.setCotton(sock.getCottonPercentPart());
         dto.setQuantity(sock.getQuantity());
         return dto;
     }
