@@ -16,5 +16,5 @@ public interface SockService {
 
     SockDto update(long id, SockDto dto);
 
-    void uploadFromFile(MultipartFile file);
+    List<SockDto> uploadFromFile(MultipartFile file);
 }

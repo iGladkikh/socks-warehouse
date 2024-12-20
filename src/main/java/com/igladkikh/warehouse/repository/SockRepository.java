@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public interface SockRepository extends JpaRepository<Sock, Long>, JpaSpecificationExecutor<Sock> {
 
-    Optional<Sock> findByColorAndCottonPercentPart(SockColor color, int cotton);
+    Optional<Sock> findByColorAndCotton(SockColor color, int cotton);
 
     default Specification<Sock> hasColor(List<SockColor> colors) {
         return (sock, query, builder) ->
@@ -20,16 +20,16 @@ public interface SockRepository extends JpaRepository<Sock, Long>, JpaSpecificat
 
     default Specification<Sock> cottonEquals(Integer cotton) {
         return (sock, query, builder) ->
-                cotton == null ? null : builder.equal(sock.get("cottonPercentPart"), cotton);
+                cotton == null ? null : builder.equal(sock.get("cotton"), cotton);
     }
 
     default Specification<Sock> cottonLessThan(Integer cotton) {
         return (sock, query, builder) ->
-                cotton == null ? null : builder.lessThan(sock.get("cottonPercentPart"), cotton);
+                cotton == null ? null : builder.lessThanOrEqualTo(sock.get("cotton"), cotton);
     }
 
     default Specification<Sock> cottonGreaterThan(Integer cotton) {
         return (sock, query, builder) ->
-                cotton == null ? null : builder.greaterThan(sock.get("cottonPercentPart"), cotton);
+                cotton == null ? null : builder.greaterThanOrEqualTo(sock.get("cotton"), cotton);
     }
 }

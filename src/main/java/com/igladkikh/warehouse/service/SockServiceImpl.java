@@ -56,7 +56,7 @@ public class SockServiceImpl implements SockService {
 
     private SockDto update(SockDto dto, Operation operation) {
         Sock sock;
-        Optional<Sock> optionalSock = repository.findByColorAndCottonPercentPart(dto.getColor(), dto.getCotton());
+        Optional<Sock> optionalSock = repository.findByColorAndCotton(dto.getColor(), dto.getCotton());
         if (optionalSock.isPresent()) {
             sock = optionalSock.get();
             int resultQuantity = operation == Operation.MINUS
@@ -94,7 +94,7 @@ public class SockServiceImpl implements SockService {
 
     @Override
     @Transactional(rollbackFor = {Throwable.class})
-    public void uploadFromFile(MultipartFile file) {
+    public List<SockDto> uploadFromFile(MultipartFile file) {
         try (Scanner scanner = new Scanner(file.getInputStream())) {
             // Сохранение копии файла
             FileUtil.createTempFile(file);
@@ -114,13 +114,15 @@ public class SockServiceImpl implements SockService {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        return SockMapper.toDto(repository.findAll());
     }
 
     private void update(SockDto dto) {
         // Валидация
         dtoValidator.validate(dto);
 
-        Optional<Sock> optionalSock = repository.findByColorAndCottonPercentPart(dto.getColor(), dto.getCotton());
+        Optional<Sock> optionalSock = repository.findByColorAndCotton(dto.getColor(), dto.getCotton());
         if (optionalSock.isEmpty()) {
             repository.save(SockMapper.toEntity(dto));
         } else {

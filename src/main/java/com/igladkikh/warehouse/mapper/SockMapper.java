@@ -12,7 +12,7 @@ public class SockMapper {
     public static Sock toEntity(SockDto dto) {
         Sock sock = new Sock();
         sock.setColor(dto.getColor());
-        sock.setCottonPercentPart(dto.getCotton());
+        sock.setCotton(dto.getCotton());
         sock.setQuantity(dto.getQuantity());
         return sock;
     }
@@ -21,7 +21,7 @@ public class SockMapper {
         SockDto dto = new SockDto();
         dto.setId(sock.getId());
         dto.setColor(sock.getColor());
-        dto.setCotton(sock.getCottonPercentPart());
+        dto.setCotton(sock.getCotton());
         dto.setQuantity(sock.getQuantity());
         return dto;
     }
