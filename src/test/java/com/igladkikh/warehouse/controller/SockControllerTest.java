@@ -8,6 +8,7 @@ import com.igladkikh.warehouse.mapper.SockMapper;
 import com.igladkikh.warehouse.model.Sock;
 import com.igladkikh.warehouse.model.SockColor;
 import com.igladkikh.warehouse.service.SockService;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,11 +39,11 @@ class SockControllerTest {
     private MockMvc mvc;
     @Autowired
     private ObjectMapper mapper;
-    private SockDto sockDto;
-    private Sock sock;
+    private static SockDto sockDto;
+    private static Sock sock;
 
-    @BeforeEach
-    void setUp() {
+    @BeforeAll
+    static void setUp() {
         SockColor colorValue = SockColor.BLACK;
         int cottonValue = 20;
         int quantityValue = 50;
@@ -127,9 +128,5 @@ class SockControllerTest {
                 .andExpect(jsonPath("$.quantity", is(sockDto.getQuantity()), Integer.class));
 
         verify(sockService, times(1)).update(1, sockDto);
-    }
-
-    @Test
-    void uploadFromFile() {
     }
 }
