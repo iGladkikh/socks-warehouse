@@ -1,5 +1,17 @@
 # REST API для учета носков на складе магазина
 
+## Используемые технологии:
+* Java 17
+* Spring Boot 2.7
+* Gradle
+* Lombok
+* Hibernate
+* PostgreSQL
+* H2
+* Flyway
+* Swagger
+* Docker
+
 ## Функционал:
 ### Регистрация прихода носков:
 POST /api/socks/income
@@ -12,7 +24,6 @@ POST /api/socks/outcome
 
 Параметры: цвет носков, процентное содержание хлопка, количество.
 Уменьшает количество носков на складе, если их хватает.
-
 
 ### Получение общего количества носков с фильтрацией:
 GET /api/socks
@@ -43,13 +54,3 @@ POST /api/socks/batch
 ```Bash
 docker-compose up
 ```
-
-### Используемые технологии:
-* Java 17
-* Spring Boot 2.7
-* Gradle
-* Lombok
-* Hibernate
-* PostgreSQL
-* Swagger
-* Docker
