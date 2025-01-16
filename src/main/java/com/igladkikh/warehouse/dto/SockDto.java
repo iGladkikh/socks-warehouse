@@ -17,9 +17,9 @@ public class SockDto {
     @Schema(description = "Цвет носков")
     private SockColor color;
     @Schema(description = "Содержание хлопка в процентах", example = "70", requiredMode = Schema.RequiredMode.REQUIRED)
-    @PercentValue
+    @PercentValue(message = "Значение поля cotton должно быть в диапазоне от 0 до 100")
     private int cotton;
-    @Schema(description = "Отстаток на складе", example = "100", requiredMode = Schema.RequiredMode.REQUIRED)
-    @Min(0)
+    @Schema(description = "Остаток на складе", example = "100", requiredMode = Schema.RequiredMode.REQUIRED)
+    @Min(value = 0, message = "Значение поля quantity не должно быть отрицательным")
     private int quantity;
 }
